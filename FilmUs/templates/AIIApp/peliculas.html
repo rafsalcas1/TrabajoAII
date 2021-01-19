@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1> Peliculas </h1>
+{% endblock %}
+
+  {% block contenido %}
+  			{% for row in peliculas %}
+  				<dt><b>Titulo: </b>{{row.titulo}}</dt>
+			    <dd><b>Fecha de estreno: </b> {{row.fecha_estreno}} | <b>Duración: </b> {{row.duracion}}</dd>
+				<dd> <b>Resumen: </b> {{row.resumen}} </dd>
+				<dd> <b>Géneros: </b> 
+					{% for generos in row.generos.all %}
+			    		{{generos.nombre}} 
+					{% endfor %}
+				</dd>
+			{% endfor %}
+  {% endblock %}
