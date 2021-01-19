@@ -1,5 +1,7 @@
 #encoding:utf-8
 from AIIApp.models import Genero, Pelicula, Actor
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login
 #from AIIApp.forms import BusquedaPorFechaForm, BusquedaPorGeneroForm
 from bs4 import BeautifulSoup
 import urllib.request
@@ -56,7 +58,6 @@ def populateDB():
         lista_actores_obj = []
         for actor in actores:
             actor = actor.find("p").find("a").string.strip()
-            print(actor)
             actor_obj, creado = Actor.objects.get_or_create(nombre=actor)
             lista_actores_obj.append(actor_obj)
             if creado:
@@ -77,6 +78,7 @@ def populateDB():
         num_peliculas = num_peliculas + 1
 
     return ((num_peliculas, num_generos, num_actores))
+    
            
 #carga los datos desde la web en la BD
 def carga(request):
@@ -85,11 +87,11 @@ def carga(request):
         if 'Aceptar' in request.POST:      
             num_peliculas = populateDB()
             mensaje="Se han almacenado: " + str(num_peliculas) +" peliculas"
-            return render(request, 'cargaBD.html', {'mensaje':mensaje})
+            return render(request, 'AIIApp/cargaBD.html', {'mensaje':mensaje})
         else:
             return redirect("/")
 
-    return render(request, 'confirmacion.html')
+    return render(request, 'AIIApp/confirmacion.html')
 
 #muestra el número de películas que hay en la BD
 def inicio(request):
@@ -99,4 +101,4 @@ def inicio(request):
 #muestra un listado con los datos de las películas (título, título original, país, director, géneros y fecha de estreno)
 def lista_peliculas(request):
     peliculas=Pelicula.objects.all()
-    return render(request,'peliculas.html', {'peliculas':peliculas})
+    return render(request,'AIIApp/peliculas.html', {'peliculas':peliculas})
